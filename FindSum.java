@@ -1,0 +1,126 @@
+package labassignment03;
+
+import java.util.ArrayList;
+class point {
+
+	int data;
+	point left, right;
+
+	point(int d)
+	{
+		data = d;
+		left = right = null;
+	}
+}
+
+class FindSum {
+
+	point root;
+	FindSum()
+	{
+		root = null;
+	}
+
+	
+	void inorder()
+	{
+		inorderUtil(this.root);
+	}
+
+
+	void inorderUtil(point node)
+	{
+		if (node == null)
+			return;
+
+		inorderUtil(node.left);
+		System.out.print(node.data + " ");
+		inorderUtil(node.right);
+	}
+	void insert(int key)
+	{
+		root = insertRec(root, key);
+	}
+		point insertRec(point root, int data)
+	{
+		if (root == null) {
+			root = new point(data);
+			return root;
+		}
+
+		if (data < root.data)
+			root.left = insertRec(root.left, data);
+		else if (data > root.data)
+			root.right = insertRec(root.right, data);
+
+		return root;
+	}
+
+	ArrayList<Integer> treeToList(point point, ArrayList<Integer>
+												list)
+	{
+		if (point == null)
+			return list;
+
+		treeToList(point.left, list);
+		list.add(point.data);
+		treeToList(point.right, list);
+
+		return list;
+	}
+
+	
+	boolean isPairPresent(point node, int target)
+	{
+		
+		ArrayList<Integer> a1 = new ArrayList<>();
+		ArrayList<Integer> a2 = treeToList(node, a1);
+
+		int start = 0;
+
+		int end = a2.size() - 1;
+
+		while (start < end) {
+
+			if (a2.get(start) + a2.get(end) == target) 
+			{
+				System.out.println("Sum =  "  + target);
+				System.out.println("Pair is (" + a2.get(start) + " , " + a2.get(end) + " )");
+								
+				return true;
+			}
+
+			if (a2.get(start) + a2.get(end) > target)
+			{
+				end--;
+			}
+
+			if (a2.get(start) + a2.get(end) < target) 
+			{
+				start++;
+			}
+		}
+
+		System.out.println("No such values are found!");
+		return false;
+	}
+
+	
+	public static void main(String[] args)
+	{
+		FindSum tree = new FindSum();
+		
+		tree.insert(40);
+		tree.insert(20);
+		tree.insert(60);
+		tree.insert(10);
+		tree.insert(30);
+		tree.insert(50);
+		tree.insert(70);
+
+		tree.isPairPresent(tree.root, 130);
+	}
+}
+
+
+
